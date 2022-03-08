@@ -16,7 +16,7 @@ func FindAndReplace(egg []byte ,replace []byte,startAddress uintptr){
 
 	fmt.Printf("Starting search from: 0x%x\n", startAddress + currentOffset)
 
-	for{
+	for !(current[0] == 0xff && current[1] == 0xff && current[2] == 0xff && current[3] == 0x00 && current[4] == 0x00 && current[5] == 0x00 && current[6] == 0x00){
 		currentOffset++
 		currentAddress := startAddress + currentOffset
 		//fmt.Printf("Searching at 0x%x\n", currentAddress)
