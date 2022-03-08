@@ -7,6 +7,7 @@ import (
 	"unsafe"
 )
 
+
 func FindAndReplace(egg []byte ,replace []byte,startAddress uintptr){
 
 	var currentOffset = uintptr(0)
@@ -15,33 +16,31 @@ func FindAndReplace(egg []byte ,replace []byte,startAddress uintptr){
 
 	fmt.Printf("Starting search from: 0x%x\n", startAddress + currentOffset)
 
-	for	!(current[0] == 0xcc &&current[1] == 0xcc &&current[2] == 0xcc &&current[3] == 0xcc&&current[4] == 0xcc){
-
+	for{
 		currentOffset++
-
 		currentAddress := startAddress + currentOffset
 		//fmt.Printf("Searching at 0x%x\n", currentAddress)
 
 		err := windows.ReadProcessMemory(0xffffffffffffffff,currentAddress,&current[0], 7, &nBytesRead)
-
 		if err != nil {
 			fmt.Println("[-] Error reading from memory")
-			os.Exit(1)
+			break
 		}
 		if (nBytesRead != 7) {
 			fmt.Println("[-] Error reading from memory\n")
-			continue
+			break
 		}
 
 		if memcmp(unsafe.Pointer(&egg[0]), unsafe.Pointer(&current[0]), 7) == 0	{
 			fmt.Printf("Found at 0x%x\n", currentAddress)
 			windows.WriteProcessMemory(0xffffffffffffffff, currentAddress, &replace[0], 7, &nBytesRead)
+			break
 		}
-
 	}
 	fmt.Printf("Ended search at:   0x%x\n", startAddress + currentOffset)
 	return
 }
+
 
 func memcmp(dest, src unsafe.Pointer, len uintptr) int {
 
