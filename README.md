@@ -1,5 +1,5 @@
 # Doge-EGGCall
-Like Direct Syscall but more EGG :)
+Like Hell's Gate but more EGG :)
 
 supports syscalls instruction replacement with an EGG (to be dynamically replaced)
 
